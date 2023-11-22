@@ -5,12 +5,9 @@ import { Customer } from '../../../../types'
 import { Pagination } from '@mui/material'
 import { format as dateFmt, parseISO, startOfMonth, endOfDay, getTime, startOfDay } from 'date-fns'
 import { useSearchParams } from 'react-router-dom'
+import { validDateRange } from '../utils'
 
 const SALES_PER_PAGE = 10
-
-const validDateRange = (dateRange: { from: Date; to: Date }) => {
-  return dateRange.to && dateRange.from && dateRange.to > dateRange.from
-}
 
 export const SalesDisplay: React.FC = () => {
   const [params, setParams] = useSearchParams()
