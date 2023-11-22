@@ -346,7 +346,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-expenses', async (_, opts: GetExpensesOptions) => {
     const whereObj = opts.expensesPeriod
-      ? { createdAt: { gte: opts.expensesPeriod.from, lte: opts.expensesPeriod.to } }
+      ? { date: { gte: opts.expensesPeriod.from, lte: opts.expensesPeriod.to } }
       : {}
 
     const expenses = await prisma.expense.findMany({
