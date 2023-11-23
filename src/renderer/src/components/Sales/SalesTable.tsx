@@ -4,7 +4,6 @@ export type OrderDetails = Prisma.OrderGetPayload<{
 }>
 import { useState } from 'react'
 import SaleEditDialog from './SaleEditDialog'
-import { getOrderTotal } from './utils'
 import { format as dateFmt } from 'date-fns'
 
 interface SalesTableProps {
@@ -78,9 +77,6 @@ export default function SalesTable({ orders }: SalesTableProps) {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {orders.map((order) => {
-                  const orderTotal = getOrderTotal(order) - order.discount
-                  const amountDue = orderTotal - order.amountReceived
-
                   return (
                     <tr key={order.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -105,17 +101,17 @@ export default function SalesTable({ orders }: SalesTableProps) {
                         {order.discount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap font-medium text-sm">
-                        {orderTotal}
+                        {order.totalAmount}
                       </td>
                       <td className="px-6 py-4 font-medium whitespace-nowrap text-sm">
                         {order.amountReceived}
                       </td>
                       <td
                         className={`px-6 py-4 whitespace-nowrap font-medium ${
-                          amountDue > 0 ? 'text-red-700' : ''
+                          order.amountDue > 0 ? 'text-red-700' : ''
                         } text-sm`}
                       >
-                        {amountDue}
+                        {order.amountDue}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a

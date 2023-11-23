@@ -39,7 +39,7 @@ export default function SaleForm({
               products: order.orderProducts.map((op) => ({
                 productId: op.productId,
                 quantity: op.quantity,
-                price: op.product.price,
+                price: op.pricePerUnit,
               })),
               discount: order.discount,
               amountReceived: order.amountReceived,
@@ -236,7 +236,7 @@ export default function SaleForm({
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                   placeholder="50"
                   validate={(value) => {
-                    const total = getOrderCurrentTotal(values.products, allProducts)
+                    const total = getOrderCurrentTotal(values.products)
                     if (Number(value) > total) {
                       return 'Discount cannot be greater than total'
                     }
@@ -260,7 +260,7 @@ export default function SaleForm({
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                   placeholder="500"
                   validate={(value) => {
-                    const total = getOrderCurrentTotal(values.products, allProducts)
+                    const total = getOrderCurrentTotal(values.products)
                     if (Number(value) > total - Number(values.discount)) {
                       return 'Amount received cannot be greater than total after discount'
                     }
@@ -275,7 +275,6 @@ export default function SaleForm({
             <div className="mt-4 text-slate-700">
               <SaleTotals
                 products={values.products}
-                allProducts={allProducts}
                 discount={values.discount}
                 amountReceived={values.amountReceived}
               />

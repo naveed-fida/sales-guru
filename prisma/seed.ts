@@ -125,15 +125,19 @@ const seed = async () => {
     data: {
       customerId: firstCustomer.id,
       createdAt: subDays(new Date(), 7),
+      totalAmount: products[0].price * 5 + products[1].price * 6,
+      amountDue: products[0].price * 5 + products[1].price * 6,
       orderProducts: {
         create: [
           {
             productId: products[0].id,
             quantity: 5,
+            pricePerUnit: products[0].price,
           },
           {
             productId: products[1].id,
             quantity: 6,
+            pricePerUnit: products[1].price,
           },
         ],
       },
@@ -143,15 +147,19 @@ const seed = async () => {
   await prisma.order.create({
     data: {
       customerId: firstCustomer.id,
+      totalAmount: products[0].price * 2 + products[1].price * 1,
+      amountDue: products[0].price * 2 + products[1].price * 1,
       orderProducts: {
         create: [
           {
             productId: products[0].id,
             quantity: 2,
+            pricePerUnit: products[0].price,
           },
           {
             productId: products[1].id,
             quantity: 1,
+            pricePerUnit: products[1].price,
           },
         ],
       },
@@ -162,15 +170,19 @@ const seed = async () => {
     data: {
       customerId: firstCustomer.id,
       createdAt: subDays(new Date(), 5),
+      totalAmount: products[0].price * 3 + products[1].price * 3,
+      amountDue: products[0].price * 3 + products[1].price * 3,
       orderProducts: {
         create: [
           {
             productId: products[0].id,
             quantity: 3,
+            pricePerUnit: products[0].price,
           },
           {
             productId: products[1].id,
             quantity: 3,
+            pricePerUnit: products[1].price,
           },
         ],
       },
@@ -181,15 +193,19 @@ const seed = async () => {
     data: {
       customerId: secondCustomer.id,
       createdAt: subDays(new Date(), 5),
+      totalAmount: products[0].price * 3 + products[1].price * 3,
+      amountDue: products[0].price * 3 + products[1].price * 3,
       orderProducts: {
         create: [
           {
             productId: products[0].id,
             quantity: 3,
+            pricePerUnit: products[0].price,
           },
           {
             productId: products[1].id,
             quantity: 3,
+            pricePerUnit: products[1].price,
           },
         ],
       },
@@ -204,15 +220,19 @@ const seed = async () => {
           data: {
             customerId: [secondCustomer.id, firstCustomer.id][i % 2],
             createdAt: subDays(new Date(), 36 + i),
+            totalAmount: products[0].price * 1 + products[1].price * 2,
+            amountDue: products[0].price * 1 + products[1].price * 2,
             orderProducts: {
               create: [
                 {
                   productId: products[0].id,
                   quantity: 1,
+                  pricePerUnit: products[0].price,
                 },
                 {
                   productId: products[1].id,
                   quantity: 2,
+                  pricePerUnit: products[1].price,
                 },
               ],
             },

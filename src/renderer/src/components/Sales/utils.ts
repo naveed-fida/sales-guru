@@ -1,4 +1,4 @@
-import type { Prisma, Product } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import * as Yup from 'yup'
 export type OrderDetails = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }
@@ -24,20 +24,10 @@ export const saleSchema = Yup.object().shape({
     .required('Amount received is required'),
 })
 
-export const getOrderTotal = (order: OrderDetails) => {
-  const total = order.orderProducts.reduce((acc, curr) => {
-    return acc + curr.quantity * curr.product.price
-  }, 0)
-  return total
-}
-
 export const getOrderCurrentTotal = (
-  products: { productId: number | undefined; quantity: number }[],
-  allProducts: Product[],
+  products: { productId: number | undefined; quantity: number; price: number }[],
 ) => {
   return products.reduce((sum, next) => {
-    const product = allProducts.find((p) => p.id === Number(next.productId))
-    if (!product) return sum
-    return sum + product.price * next.quantity
+    return sum + next.price * next.quantity
   }, 0)
 }

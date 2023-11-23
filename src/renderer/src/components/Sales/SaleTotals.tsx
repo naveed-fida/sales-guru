@@ -1,20 +1,13 @@
-import type { Product } from '@prisma/client'
 import { getOrderCurrentTotal } from './utils'
 
 interface SaleTotalsProps {
-  products: { productId: number | undefined; quantity: number }[]
+  products: { productId: number | undefined; quantity: number; price: number }[]
   discount: number
   amountReceived: number
-  allProducts: Product[]
 }
 
-export default function SaleTotals({
-  products,
-  allProducts,
-  discount,
-  amountReceived,
-}: SaleTotalsProps) {
-  const total = getOrderCurrentTotal(products, allProducts)
+export default function SaleTotals({ products, discount, amountReceived }: SaleTotalsProps) {
+  const total = getOrderCurrentTotal(products)
 
   return (
     <div>

@@ -242,7 +242,8 @@ app.whenReady().then(() => {
       })
 
       const prices = data.products?.map((p) => p.price * p.quantity) || []
-      const amountDue = prices.reduce((a, b) => a + b, 0) - data.discount - data.amountReceived
+      const total = prices.reduce((a, b) => a + b, 0)
+      const amountDue = total - data.discount - data.amountReceived
 
       await prisma.order.update({
         where: {
@@ -253,8 +254,13 @@ app.whenReady().then(() => {
           discount: data.discount,
           amountReceived: data.amountReceived,
           amountDue,
+          totalAmount: total,
           orderProducts: {
-            create: data.products?.map((p) => ({ productId: p.productId, quantity: p.quantity })),
+            create: data.products?.map((p) => ({
+              productId: p.productId,
+              quantity: p.quantity,
+              pricePerUnit: p.price,
+            })),
           },
         },
       })
@@ -288,7 +294,8 @@ app.whenReady().then(() => {
   ipcMain.handle('create-order', async (_, data: OrderInput) => {
     return await prisma.$transaction(async (prisma) => {
       const prices = data.products?.map((p) => p.price * p.quantity) || []
-      const amountDue = prices.reduce((a, b) => a + b, 0) - data.discount - data.amountReceived
+      const total = prices.reduce((a, b) => a + b, 0)
+      const amountDue = total - data.discount - data.amountReceived
 
       await prisma.order.create({
         data: {
@@ -296,8 +303,13 @@ app.whenReady().then(() => {
           discount: data.discount,
           amountReceived: data.amountReceived,
           amountDue,
+          totalAmount: total,
           orderProducts: {
-            create: data.products?.map((p) => ({ productId: p.productId, quantity: p.quantity })),
+            create: data.products?.map((p) => ({
+              productId: p.productId,
+              quantity: p.quantity,
+              pricePerUnit: p.price,
+            })),
           },
         },
       })
@@ -402,7 +414,7 @@ app.whenReady().then(() => {
   ipcMain.handle('get-sales-stats', async (_, period: { from: Date; to: Date }) => {
     const total = await prisma.order.aggregate({
       _sum: {
-        amountReceived: true,
+        totalAmount: true,
       },
       where: {
         createdAt: {
@@ -424,7 +436,7 @@ app.whenReady().then(() => {
       },
     })
 
-    return { total, outstanding }
+    return { total: total._sum.totalAmount, outstanding: outstanding._sum.amountDue }
   })
 })
 

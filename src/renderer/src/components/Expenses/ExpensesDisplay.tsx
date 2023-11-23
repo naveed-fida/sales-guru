@@ -25,7 +25,6 @@ export const ExpensesDisplay: React.FC = () => {
     getTime(defaultEndDate) - getTime(defaultStartDate) === currentDateDiff
 
   useEffect(() => {
-    console.log(expensesPeriod)
     window.api
       .getExpenses({
         ...(expensesPeriod.to && expensesPeriod.from && expensesPeriod.to > expensesPeriod.from
