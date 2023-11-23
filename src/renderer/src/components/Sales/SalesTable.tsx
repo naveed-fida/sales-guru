@@ -5,6 +5,7 @@ export type OrderDetails = Prisma.OrderGetPayload<{
 import { useState } from 'react'
 import SaleEditDialog from './SaleEditDialog'
 import { format as dateFmt } from 'date-fns'
+import { ArrowUturnLeftIcon } from '@heroicons/react/24/solid'
 
 interface SalesTableProps {
   orders: OrderDetails[]
@@ -78,8 +79,13 @@ export default function SalesTable({ orders }: SalesTableProps) {
               <tbody className="bg-white divide-y divide-gray-200">
                 {orders.map((order) => {
                   return (
-                    <tr key={order.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <tr className="relative" key={order.id}>
+                      <td className="relative px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {order.returned && (
+                          <span className="absolute p-1 top-1 left-1 rounded-full bg-orange-600">
+                            <ArrowUturnLeftIcon className="h-2 w-2 text-white" aria-hidden />
+                          </span>
+                        )}
                         {order.id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
