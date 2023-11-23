@@ -27,6 +27,7 @@ export interface GetOrdersOptions {
   salesPeriod?: { from: Date; to: Date }
   customerId?: number
   status?: 'due' | 'paid' | 'all'
+  returned?: boolean
 }
 
 export interface GetExpensesOptions {

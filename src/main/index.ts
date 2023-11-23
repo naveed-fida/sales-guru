@@ -186,6 +186,7 @@ app.whenReady().then(() => {
         : {}),
       ...(opts.status === 'due' ? { amountDue: { gt: 0 } } : {}),
       ...(opts.status === 'paid' ? { amountDue: { equals: 0 } } : {}),
+      ...(opts.returned ? { returned: true } : {}),
     }
 
     const count = await prisma.order.count({

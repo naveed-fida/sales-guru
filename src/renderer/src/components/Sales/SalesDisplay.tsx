@@ -32,6 +32,8 @@ export const SalesDisplay: React.FC = () => {
     customerIdFromParam ? Number(customerIdFromParam) : 'none',
   )
 
+  const [showReturnedOnly, setShowReturnedOnly] = useState<boolean>(false)
+
   const currentDateDiff = getTime(salesPeriod.to) - getTime(salesPeriod.from)
   const isSalesPeriodDefault =
     getTime(defaultEndDate) - getTime(defaultStartDate) === currentDateDiff
@@ -50,6 +52,7 @@ export const SalesDisplay: React.FC = () => {
           ? { salesPeriod }
           : { salesPeriod: { from: defaultStartDate, to: defaultEndDate } }),
         ...(customerId === 'none' || !customerId ? {} : { customerId }),
+        ...(showReturnedOnly ? { returned: true } : {}),
         skip: (currPage - 1) * SALES_PER_PAGE,
         take: SALES_PER_PAGE,
       })
@@ -57,13 +60,14 @@ export const SalesDisplay: React.FC = () => {
         setSalesCount(count)
         setOrders(orders)
       })
-  }, [currPage, salesPeriod, statusFilter, customerId])
+  }, [currPage, salesPeriod, statusFilter, customerId, showReturnedOnly])
 
   const showClearFiltersButton =
     customerId !== 'none' ||
     statusFilter !== 'all' ||
     !validDateRange(salesPeriod) ||
-    !isSalesPeriodDefault
+    !isSalesPeriodDefault ||
+    showReturnedOnly
 
   return (
     <div className="sales-display h-[90%]">
@@ -162,6 +166,22 @@ export const SalesDisplay: React.FC = () => {
               <option value="paid">Paid</option>
             </select>
           </div>
+          <div className="flex items-center ml-4 align-middle gap-4 mt-4">
+            <label className="text-sm" htmlFor="returned-only">
+              Returned Only
+            </label>
+            <input
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
+              name="returned-only"
+              id="returned-only"
+              type="checkbox"
+              checked={showReturnedOnly}
+              onChange={() => {
+                setCurrPage(1)
+                setShowReturnedOnly(!showReturnedOnly)
+              }}
+            />
+          </div>
           {showClearFiltersButton && (
             <button
               className="text-sm text-red-700 mt-8 border-red-700 border-2 rounded-md px-2 py-1 self-center"
@@ -173,6 +193,7 @@ export const SalesDisplay: React.FC = () => {
                 })
                 setStatusFilter('all')
                 setCustomerId('none')
+                setShowReturnedOnly(false)
               }}
             >
               Clear Filters
