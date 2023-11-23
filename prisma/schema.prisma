@@ -47,6 +47,7 @@ model Order {
   amountReceived Int @default(0)
   discount       Int @default(0)
   amountDue      Int
+  returned      Boolean @default(false)
   totalAmount    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
