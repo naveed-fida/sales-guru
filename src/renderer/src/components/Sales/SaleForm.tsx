@@ -2,7 +2,7 @@ import type { Customer, Prisma, Product } from '@prisma/client'
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { getOrderCurrentTotal, saleSchema } from './utils'
 import SaleTotals from './SaleTotals'
-import { BriefcaseIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { BriefcaseIcon, XCircleIcon, ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 
 export type Order = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }
@@ -17,10 +17,12 @@ interface FormValues {
 
 interface SaleForm {
   order?: Order
+  onReturnClick?: () => void
   allCustomers: Customer[]
   allProducts: Product[]
   onSubmit: (values: FormValues) => void
   onDeleteClick?: () => void
+  onReReturnClick?: () => void
 }
 
 export default function SaleForm({
@@ -29,6 +31,8 @@ export default function SaleForm({
   allProducts,
   onSubmit,
   onDeleteClick,
+  onReturnClick,
+  onReReturnClick,
 }: SaleForm) {
   return (
     <Formik<FormValues>
@@ -289,12 +293,11 @@ export default function SaleForm({
                 </span>
                 <span>Save Order</span>
               </button>
-              {onDeleteClick ? (
+              {order && onDeleteClick ? (
                 <button
                   type="button"
                   className="flex gap-3 items-center px-4 py-2 bg-red-800 text-slate-50 rounded-md shadow-md"
                   onClick={() => {
-                    if (!order) return
                     onDeleteClick()
                   }}
                 >
@@ -305,6 +308,34 @@ export default function SaleForm({
                 </button>
               ) : (
                 ''
+              )}
+              {order && !order.returned && onReturnClick && (
+                <button
+                  type="button"
+                  className="flex gap-3 items-center px-4 py-2 bg-red-800 text-slate-50 rounded-md shadow-md"
+                  onClick={() => {
+                    onReturnClick()
+                  }}
+                >
+                  <span>
+                    <ArrowUturnLeftIcon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span>Return Order</span>
+                </button>
+              )}
+              {order && order.returned && onReReturnClick && (
+                <button
+                  type="button"
+                  className="flex gap-3 items-center px-4 py-2 bg-orange-500 text-slate-50 rounded-md shadow-md"
+                  onClick={() => {
+                    onReReturnClick()
+                  }}
+                >
+                  <span>
+                    <ArrowUturnLeftIcon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span>Unreturn Order</span>
+                </button>
               )}
             </div>
           </Form>

@@ -30,6 +30,8 @@ const api = {
     ipcRenderer.invoke('get-expenses-stats', period),
   getSalesStats: (period: { from: Date; to: Date }) =>
     ipcRenderer.invoke('get-sales-stats', period),
+  returnOrder: (id: number) => ipcRenderer.invoke('return-order', id),
+  reReturnOrder: (id: number) => ipcRenderer.invoke('re-return-order', id),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

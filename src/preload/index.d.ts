@@ -35,6 +35,8 @@ interface API {
     from: Date
     to: Date
   }) => Promise<{ total: number; outstanding: number }>
+  returnOrder: (id: number) => Promise<Order>
+  reReturnOrder: (id: number) => Promise<Order>
 }
 
 declare global {

@@ -410,7 +410,6 @@ app.whenReady().then(() => {
     return { total: total._sum.amount }
   })
 
-  // Take care of this. Also see if prices in orderProducts change with new product prices. That would be bad
   ipcMain.handle('get-sales-stats', async (_, period: { from: Date; to: Date }) => {
     const total = await prisma.order.aggregate({
       _sum: {
@@ -437,6 +436,74 @@ app.whenReady().then(() => {
     })
 
     return { total: total._sum.totalAmount, outstanding: outstanding._sum.amountDue }
+  })
+
+  ipcMain.handle('return-order', async (_, id: number) => {
+    await prisma.$transaction(async (prisma) => {
+      const orderProducts = await prisma.orderProduct.findMany({
+        where: {
+          orderId: id,
+        },
+      })
+
+      await Promise.all(
+        orderProducts.map((op) => {
+          return prisma.product.update({
+            where: {
+              id: op.productId,
+            },
+            data: {
+              inventory: {
+                increment: op.quantity,
+              },
+            },
+          })
+        }),
+      )
+
+      await prisma.order.update({
+        where: {
+          id,
+        },
+        data: {
+          returned: true,
+        },
+      })
+    })
+  })
+
+  ipcMain.handle('re-return-order', async (_, id: number) => {
+    await prisma.$transaction(async (prisma) => {
+      const orderProducts = await prisma.orderProduct.findMany({
+        where: {
+          orderId: id,
+        },
+      })
+
+      await Promise.all(
+        orderProducts.map((op) => {
+          return prisma.product.update({
+            where: {
+              id: op.productId,
+            },
+            data: {
+              inventory: {
+                decrement: op.quantity,
+              },
+            },
+          })
+        }),
+      )
+
+      await prisma.order.update({
+        where: {
+          id,
+        },
+        data: {
+          returned: false,
+        },
+      })
+    })
   })
 })
 
