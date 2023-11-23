@@ -46,7 +46,7 @@ export const SalesDisplay: React.FC = () => {
     window.api
       .getOrders({
         ...(statusFilter === 'all' ? {} : { status: statusFilter }),
-        ...(salesPeriod.to && salesPeriod.from && salesPeriod.to > salesPeriod.from
+        ...(validDateRange(salesPeriod)
           ? { salesPeriod }
           : { salesPeriod: { from: defaultStartDate, to: defaultEndDate } }),
         ...(customerId === 'none' || !customerId ? {} : { customerId }),
@@ -106,7 +106,9 @@ export const SalesDisplay: React.FC = () => {
             <div className="block text-sm font-medium text-gray-700">By Date</div>
             <div className="flex">
               <div className="flex items-center gap-4 mt-4">
-                <label htmlFor="date-from">From</label>
+                <label className="text-sm" htmlFor="date-from">
+                  From
+                </label>
                 <input
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                   name="date-from"
@@ -123,7 +125,9 @@ export const SalesDisplay: React.FC = () => {
                 />
               </div>
               <div className="flex items-center gap-4 ml-4 mt-4">
-                <label htmlFor="date-to">To</label>
+                <label className="text-sm" htmlFor="date-to">
+                  To
+                </label>
                 <input
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                   name="date-to"

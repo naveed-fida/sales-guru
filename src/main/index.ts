@@ -407,7 +407,7 @@ app.whenReady().then(() => {
         },
       },
     })
-    return { total }
+    return { total: total._sum.amount }
   })
 
   // Take care of this. Also see if prices in orderProducts change with new product prices. That would be bad

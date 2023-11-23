@@ -4,6 +4,7 @@ import ExpenseAddDialog from './ExpenseAddDialog'
 import { Expense } from '@prisma/client'
 import { endOfDay, getTime, parseISO, startOfDay, startOfMonth, format as dateFmt } from 'date-fns'
 import { Pagination } from '@mui/material'
+import { validDateRange } from '../utils'
 
 const EXPENSES_PER_PAGE = 10
 
@@ -27,7 +28,7 @@ export const ExpensesDisplay: React.FC = () => {
   useEffect(() => {
     window.api
       .getExpenses({
-        ...(expensesPeriod.to && expensesPeriod.from && expensesPeriod.to > expensesPeriod.from
+        ...(validDateRange(expensesPeriod)
           ? { expensesPeriod }
           : { expensesPeriod: { from: defaultStartDate, to: defaultEndDate } }),
         skip: (currPage - 1) * EXPENSES_PER_PAGE,
@@ -105,8 +106,23 @@ export const ExpensesDisplay: React.FC = () => {
         </div>
       </div>
       <div className="expenses-display__body mt-4 h-[100%] overflow-scroll">
+        {validDateRange(expensesPeriod) ? (
+          <>
+            {isExpensesPeriodDefault ? (
+              <p className="my-2 text-sm text-green-700">Showing expenses for current month.</p>
+            ) : (
+              <p className="my-2 text-sm text-green-700">
+                Showing expenses from {dateFmt(expensesPeriod.from, 'dd/MM/yyyy')} to{' '}
+                {dateFmt(expensesPeriod.to, 'dd/MM/yyy')}
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="my-2 text-sm text-red-700">
+            Date range invalid. Showing expenses for current month.
+          </p>
+        )}
         <ExpensesTable expenses={expenses} />
-
         {expensesCount && expensesCount > EXPENSES_PER_PAGE && (
           <div className="mt-4 mb-2">
             <Pagination

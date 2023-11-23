@@ -1,5 +1,6 @@
 import { endOfDay, getTime, parseISO, startOfDay, startOfMonth, format as dateFmt } from 'date-fns'
 import { useEffect, useState } from 'react'
+import { validDateRange } from './utils'
 
 export const Dashboard: React.FC = () => {
   const defaultStartDate = startOfMonth(new Date())
@@ -13,6 +14,10 @@ export const Dashboard: React.FC = () => {
     outstanding: number
   } | null>(null)
 
+  const [expensesStats, setExpensesStats] = useState<{
+    total: number
+  } | null>(null)
+
   const stats = [
     {
       name: 'Total Sales',
@@ -22,16 +27,30 @@ export const Dashboard: React.FC = () => {
       name: 'Outstanding Invoices',
       stat: 'PKR ' + (salesStats?.outstanding || 0),
     },
+    {
+      name: 'Total Expenses',
+      stat: 'PKR ' + (expensesStats?.total || 0),
+    },
   ]
 
   const currentDateDiff = getTime(period.to) - getTime(period.from)
   const isPeriodDefault = getTime(defaultEndDate) - getTime(defaultStartDate) === currentDateDiff
 
   useEffect(() => {
-    window.api.getSalesStats(period).then((stats) => {
-      setSalesStats(stats)
-      console.log(stats)
-    })
+    window.api
+      .getSalesStats(
+        validDateRange(period) ? period : { from: defaultStartDate, to: defaultEndDate },
+      )
+      .then((stats) => {
+        setSalesStats(stats)
+      })
+    window.api
+      .getExpensesStats(
+        validDateRange(period) ? period : { from: defaultStartDate, to: defaultEndDate },
+      )
+      .then((stats) => {
+        setExpensesStats(stats)
+      })
   }, [period])
 
   return (
@@ -93,7 +112,22 @@ export const Dashboard: React.FC = () => {
       </div>
 
       <div className="dashboard__body">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">Last 30 days</h3>
+        {validDateRange(period) ? (
+          <>
+            {isPeriodDefault ? (
+              <p className="my-2 text-sm text-green-700">Showing statistics for current month.</p>
+            ) : (
+              <p className="my-2 text-sm text-green-700">
+                Showing statistics from {dateFmt(period.from, 'dd/MM/yyyy')} to{' '}
+                {dateFmt(period.to, 'dd/MM/yyy')}
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="my-2 text-sm text-red-700">
+            Date range invalid. Showing statistics for current month.
+          </p>
+        )}
         <dl className="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-3 md:divide-y-0 md:divide-x">
           {stats.map((item) => (
             <div key={item.name} className="px-4 py-5 sm:p-6">
