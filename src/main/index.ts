@@ -382,6 +382,50 @@ app.whenReady().then(() => {
     const count = await prisma.order.count()
     return count
   })
+
+  ipcMain.handle('get-expenses-stats', async (_, period: { from: Date; to: Date }) => {
+    const total = await prisma.expense.aggregate({
+      _sum: {
+        amount: true,
+      },
+      where: {
+        date: {
+          gte: period.from,
+          lte: period.to,
+        },
+      },
+    })
+    return { total }
+  })
+
+  // Take care of this. Also see if prices in orderProducts change with new product prices. That would be bad
+  ipcMain.handle('get-sales-stats', async (_, period: { from: Date; to: Date }) => {
+    const total = await prisma.order.aggregate({
+      _sum: {
+        amountReceived: true,
+      },
+      where: {
+        createdAt: {
+          gte: period.from,
+          lte: period.to,
+        },
+      },
+    })
+
+    const outstanding = await prisma.order.aggregate({
+      _sum: {
+        amountDue: true,
+      },
+      where: {
+        createdAt: {
+          gte: period.from,
+          lte: period.to,
+        },
+      },
+    })
+
+    return { total, outstanding }
+  })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

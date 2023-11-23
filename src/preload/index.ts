@@ -26,6 +26,10 @@ const api = {
   deleteExpense: (id) => ipcRenderer.invoke('delete-expense', id),
   saveExpense: (data: Prisma.ExpenseCreateInput) => ipcRenderer.invoke('save-expense', data),
   getSalesCount: () => ipcRenderer.invoke('get-sales-count'),
+  getExpensesStats: (period: { from: Date; to: Date }) =>
+    ipcRenderer.invoke('get-expenses-stats', period),
+  getSalesStats: (period: { from: Date; to: Date }) =>
+    ipcRenderer.invoke('get-sales-stats', period),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

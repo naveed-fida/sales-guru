@@ -30,6 +30,11 @@ interface API {
   getExpenses: (opts?: GetExpensesOptions) => Promise<{ expenses: Expense[]; count: number }>
   deleteExpense: (id: number) => Promise<Expense>
   saveExpense: (data: Prisma.ExpenseCreateInput) => Promise<Expense>
+  getExpensesStats: (period: { from: Date; to: Date }) => Promise<{ total: number }>
+  getSalesStats: (period: {
+    from: Date
+    to: Date
+  }) => Promise<{ total: number; outstanding: number }>
 }
 
 declare global {
