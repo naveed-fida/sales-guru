@@ -11,57 +11,17 @@ const seed = async () => {
   await prisma.expense.deleteMany({})
 
   await prisma.expense.createMany({
-    data: [
-      {
-        description: 'Electricity',
-        amount: 1000,
-        date: subDays(new Date(), 3),
-      },
-      {
-        description: 'Water',
-        amount: 500,
-        date: subDays(new Date(), 8),
-      },
-      {
-        description: 'Gas',
-        amount: 500,
-        date: subDays(new Date(), 5),
-      },
-      {
-        description: 'Internet',
-        amount: 600,
-        date: subDays(new Date(), 10),
-      },
-      {
-        description: 'Rent',
-        amount: 10000,
-        date: subDays(new Date(), 15),
-      },
-      {
-        description: 'Maintenance',
-        amount: 1000,
-        date: subDays(new Date(), 40),
-      },
-      {
-        description: 'Misc',
-        amount: 500,
-        date: subDays(new Date(), 36),
-      },
-    ],
+    data: Array.from({ length: 20 }).map((_, i) => ({
+      description: `Expense ${i + 1}`,
+      amount: 100 + i,
+      date: subDays(new Date(), 15 + i),
+    })),
   })
 
   await prisma.area.createMany({
-    data: [
-      {
-        name: 'Metroville',
-      },
-      {
-        name: 'Landhi',
-      },
-      {
-        name: 'Malir',
-      },
-    ],
+    data: Array.from({ length: 20 }).map((_, i) => ({
+      name: `Area ${i + 1}`,
+    })),
   })
 
   await prisma.customer.create({
@@ -91,6 +51,13 @@ const seed = async () => {
         phone: '1230984567',
       },
     ],
+  })
+
+  await prisma.customer.createMany({
+    data: Array.from({ length: 20 }).map((_, i) => ({
+      name: `Customer ${i + 1}`,
+      phone: `123456789${i}`,
+    })),
   })
 
   const customers = await prisma.customer.findMany()

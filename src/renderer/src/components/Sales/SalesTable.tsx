@@ -19,9 +19,9 @@ export default function SalesTable({ orders }: SalesTableProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="my-2 w-full overflow-x-auto">
+      <div className="my-2 overflow-x-auto">
         <div className="py-2 align-middle inline-block">
-          <div className="shadow border-b border-gray-200 sm:rounded-lg">
+          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <table className="w-full divide-y divide-gray-200 ">
               <thead className="bg-gray-50">
                 <tr>

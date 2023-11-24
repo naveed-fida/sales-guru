@@ -24,7 +24,7 @@ interface API {
   createOrder: (data: OrderInput) => Promise<Order>
   updateOrder: (id: int, data: OrderInput) => Promise<Order>
   deleteOrder: (id: int) => Promise<Order>
-  getAreas: () => Promise<Area[]>
+  getAreas: (opts?: { skip?: number; take?: number }) => Promise<{ areas: Area[]; count: number }>
   deleteArea: (id: number) => Promise<Area>
   saveArea: (data: Prisma.AreaCreateInput) => Promise<Area>
   getExpenses: (opts?: GetExpensesOptions) => Promise<{ expenses: Expense[]; count: number }>

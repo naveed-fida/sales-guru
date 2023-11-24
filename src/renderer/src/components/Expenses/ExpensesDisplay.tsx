@@ -41,7 +41,7 @@ export const ExpensesDisplay: React.FC = () => {
   }, [expensesPeriod, currPage])
 
   return (
-    <div className="expenses-display h-[90%]">
+    <div className="expenses-display h-full">
       <div className="expenses-display__header flex justify-between items-center">
         <h1 className="text-2xl">Expenses</h1>
         <button
@@ -105,7 +105,7 @@ export const ExpensesDisplay: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="expenses-display__body mt-4 h-[100%] overflow-scroll">
+      <div className="expenses-display__body mt-4 h-[calc(100%-250px)]">
         {validDateRange(expensesPeriod) ? (
           <>
             {isExpensesPeriodDefault ? (

@@ -18,7 +18,7 @@ function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
-    height: 670,
+    height: 700,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -332,13 +332,16 @@ app.whenReady().then(() => {
     })
   })
 
-  ipcMain.handle('get-areas', async () => {
+  ipcMain.handle('get-areas', async (_, opts?: { skip?: number; take?: number }) => {
     const areas = await prisma.area.findMany({
       orderBy: {
         createdAt: 'desc',
       },
+      skip: opts?.skip,
+      take: opts?.take,
     })
-    return areas
+    const count = await prisma.area.count()
+    return { areas, count }
   })
 
   ipcMain.handle('save-area', async (_, area) => {
@@ -367,6 +370,8 @@ app.whenReady().then(() => {
       orderBy: {
         createdAt: 'desc',
       },
+      take: opts.take,
+      skip: opts.skip,
     })
 
     const count = await prisma.expense.count({
