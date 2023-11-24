@@ -36,7 +36,7 @@ export default function Navigation() {
   }
 
   return (
-    <div className="w-[250px] h-[100vh] flex flex-col bg-gray-800">
+    <div className="w-[250px] shrink-0 h-[100vh] flex flex-col bg-gray-800">
       <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
         <nav className="mt-5 flex-1 px-2 bg-gray-800 space-y-1" aria-label="Sidebar">
           {navigation.map((item) => (

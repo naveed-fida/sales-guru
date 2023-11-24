@@ -10,9 +10,9 @@ import { ExpensesDisplay } from './components/Expenses/ExpensesDisplay'
 function App(): JSX.Element {
   return (
     <div className="wrapper h-full">
-      <div className="mx-auto flex">
+      <div className="mx-auto flex w-full">
         <Navigation />
-        <div className="flex-1 bg-slate-100 text-slate-700 p-4 text-lg h-[100vh]">
+        <div className="flex-1 bg-slate-100 text-slate-700 p-4 text-lg h-[100vh] w-[calc(100vh - 250px)]">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/customers" element={<CustomersDisplay />} />

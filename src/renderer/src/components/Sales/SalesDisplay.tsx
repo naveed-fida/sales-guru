@@ -70,7 +70,7 @@ export const SalesDisplay: React.FC = () => {
     showReturnedOnly
 
   return (
-    <div className="sales-display h-full">
+    <div className="sales-display h-full w-full">
       <div className="sales-display__header flex justify-between items-center ">
         <h1 className="text-2xl">Sales</h1>
         <button
