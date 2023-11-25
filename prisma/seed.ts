@@ -85,6 +85,14 @@ const seed = async () => {
     ],
   })
 
+  await prisma.product.createMany({
+    data: Array.from({ length: 20 }).map((_, i) => ({
+      name: `Product ${i + 1}`,
+      price: 10 + i,
+      inventory: 100,
+    })),
+  })
+
   const products = await prisma.product.findMany({ where: {}, take: 2 })
   invariant(products.length > 0, 'No product found')
 

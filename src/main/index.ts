@@ -143,13 +143,16 @@ app.whenReady().then(() => {
     return result
   })
 
-  ipcMain.handle('get-products', async () => {
+  ipcMain.handle('get-products', async (_, opts?: { take?: number; skip?: number }) => {
     const products = await prisma.product.findMany({
       orderBy: {
         createdAt: 'desc',
       },
+      skip: opts?.skip,
+      take: opts?.take,
     })
-    return products
+    const count = await prisma.product.count()
+    return { products, count }
   })
 
   ipcMain.handle('save-product', async (_, product) => {

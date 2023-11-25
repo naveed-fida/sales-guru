@@ -10,7 +10,7 @@ const api = {
   updateCustomer: (id: number, data: CustomerFormInput) =>
     ipcRenderer.invoke('update-customer', id, data),
   deleteCustomer: (id: number) => ipcRenderer.invoke('delete-customer', id),
-  getProducts: () => ipcRenderer.invoke('get-products'),
+  getProducts: (opts: { skip?: number; take?: number }) => ipcRenderer.invoke('get-products', opts),
   saveProduct: (data: Prisma.ProductCreateInput) => ipcRenderer.invoke('save-product', data),
   updateProduct: (id: number, data: Prisma.ProductUpdateInput) =>
     ipcRenderer.invoke('update-product', id, data),

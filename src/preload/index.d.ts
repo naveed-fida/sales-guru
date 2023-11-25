@@ -15,7 +15,10 @@ interface API {
   saveCustomer: (data: CustomerFormInput) => Promise<Customer>
   updateCustomer: (id: int, data: CustomerFormInput) => Promise<Customer>
   deleteCustomer: (id: int) => Promise<Customer>
-  getProducts: () => Promise<Product[]>
+  getProducts: (opts?: {
+    take?: number
+    skip?: number
+  }) => Promise<{ products: Product[]; count: number }>
   saveProduct: (data: Prisma.ProductCreateInput) => Promise<Product>
   updateProduct: (id: int, data: Prisma.ProductUpdateInput) => Promise<Product>
   deleteProduct: (id: int) => Promise<Product>
