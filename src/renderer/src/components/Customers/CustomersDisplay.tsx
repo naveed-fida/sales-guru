@@ -3,20 +3,34 @@ import { useEffect, useState } from 'react'
 import CustomersTable from './CustomersTable'
 import CustomerAddDialog from './CustomerAddDialog'
 import { Area } from '@prisma/client'
+import { Pagination } from '@mui/material'
+
+const CUSTOMERS_PER_PAGE = 10
 
 export const CustomersDisplay: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([])
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false)
+  const [currPage, setCurrPage] = useState<number>(1)
+  const [customerCount, setCustomerCount] = useState<number>(0)
 
   const [allAreas, setAllAreas] = useState<Area[]>([])
 
   useEffect(() => {
-    window.api.getCustomers().then((customers) => {
-      setCustomers(customers)
-    })
     window.api.getAreas().then(({ areas }) => {
       setAllAreas(areas)
     })
+  }, [])
+
+  useEffect(() => {
+    window.api
+      .getCustomers({
+        skip: (currPage - 1) * 10,
+        take: 10,
+      })
+      .then(({ customers, count }) => {
+        setCustomerCount(count)
+        setCustomers(customers)
+      })
   }, [])
 
   return (
@@ -30,8 +44,18 @@ export const CustomersDisplay: React.FC = () => {
           Add Customer
         </button>
       </div>
-      <div className="customers-display__body mt-4 h-[100%] overflow-scroll">
+      <div className="customers-display__body mt-4 h-[calc(100%-60px)]">
         <CustomersTable areas={allAreas} people={customers} />
+        {customers && customerCount > CUSTOMERS_PER_PAGE && (
+          <div className="mt-8 mb-2">
+            <Pagination
+              count={Math.ceil(customerCount / CUSTOMERS_PER_PAGE)}
+              onChange={(_, value) => {
+                setCurrPage(value)
+              }}
+            />
+          </div>
+        )}
       </div>
       <CustomerAddDialog
         isOpen={showAddDialog}

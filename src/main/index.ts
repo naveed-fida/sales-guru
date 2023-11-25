@@ -3,7 +3,12 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { PrismaClient, Prisma } from '@prisma/client'
-import type { CustomerFormInput, GetExpensesOptions, GetOrdersOptions } from '../types'
+import type {
+  CustomerFormInput,
+  GetExpensesOptions,
+  GetOrdersOptions,
+  PaginationOpts,
+} from '../types'
 
 interface OrderInput {
   customerId: number
@@ -68,7 +73,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  ipcMain.handle('get-customers', async () => {
+  ipcMain.handle('get-customers', async (_, opts?: PaginationOpts) => {
     const customers = await prisma.customer.findMany({
       include: {
         area: true,
@@ -76,8 +81,12 @@ app.whenReady().then(() => {
       orderBy: {
         createdAt: 'desc',
       },
+      skip: opts?.skip,
+      take: opts?.take,
     })
-    return customers
+
+    const count = await prisma.customer.count()
+    return { customers, count }
   })
 
   ipcMain.handle('save-customer', async (_, customer: CustomerFormInput) => {

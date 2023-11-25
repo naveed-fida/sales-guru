@@ -8,17 +8,15 @@ import type {
   CustomerFormInput,
   GetOrdersOptions,
   GetExpensesOptions,
+  PaginationOpts,
 } from '../types'
 
 interface API {
-  getCustomers: () => Promise<Customer[]>
+  getCustomers: (opts?: PaginationOpts) => Promise<{ customers: Customer[]; count: number }>
   saveCustomer: (data: CustomerFormInput) => Promise<Customer>
   updateCustomer: (id: int, data: CustomerFormInput) => Promise<Customer>
   deleteCustomer: (id: int) => Promise<Customer>
-  getProducts: (opts?: {
-    take?: number
-    skip?: number
-  }) => Promise<{ products: Product[]; count: number }>
+  getProducts: (opts?: PaginationOpts) => Promise<{ products: Product[]; count: number }>
   saveProduct: (data: Prisma.ProductCreateInput) => Promise<Product>
   updateProduct: (id: int, data: Prisma.ProductUpdateInput) => Promise<Product>
   deleteProduct: (id: int) => Promise<Product>
@@ -27,7 +25,7 @@ interface API {
   createOrder: (data: OrderInput) => Promise<Order>
   updateOrder: (id: int, data: OrderInput) => Promise<Order>
   deleteOrder: (id: int) => Promise<Order>
-  getAreas: (opts?: { skip?: number; take?: number }) => Promise<{ areas: Area[]; count: number }>
+  getAreas: (opts?: PaginationOpts) => Promise<{ areas: Area[]; count: number }>
   deleteArea: (id: number) => Promise<Area>
   saveArea: (data: Prisma.AreaCreateInput) => Promise<Area>
   getExpenses: (opts?: GetExpensesOptions) => Promise<{ expenses: Expense[]; count: number }>

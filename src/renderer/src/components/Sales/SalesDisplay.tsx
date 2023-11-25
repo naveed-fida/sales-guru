@@ -39,7 +39,7 @@ export const SalesDisplay: React.FC = () => {
     getTime(defaultEndDate) - getTime(defaultStartDate) === currentDateDiff
 
   useEffect(() => {
-    window.api.getCustomers().then((customers) => {
+    window.api.getCustomers().then(({ customers }) => {
       setAllCustomers(customers)
     })
   }, [])

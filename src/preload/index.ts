@@ -1,16 +1,21 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import type { Prisma } from '@prisma/client'
-import type { CustomerFormInput, GetExpensesOptions, GetOrdersOptions } from '../types'
+import type {
+  CustomerFormInput,
+  GetExpensesOptions,
+  GetOrdersOptions,
+  PaginationOpts,
+} from '../types'
 
 // Custom APIs for renderer
 const api = {
-  getCustomers: () => ipcRenderer.invoke('get-customers'),
+  getCustomers: (opts?: PaginationOpts) => ipcRenderer.invoke('get-customers', opts),
   saveCustomer: (customer: CustomerFormInput) => ipcRenderer.invoke('save-customer', customer),
   updateCustomer: (id: number, data: CustomerFormInput) =>
     ipcRenderer.invoke('update-customer', id, data),
   deleteCustomer: (id: number) => ipcRenderer.invoke('delete-customer', id),
-  getProducts: (opts: { skip?: number; take?: number }) => ipcRenderer.invoke('get-products', opts),
+  getProducts: (opts?: PaginationOpts) => ipcRenderer.invoke('get-products', opts),
   saveProduct: (data: Prisma.ProductCreateInput) => ipcRenderer.invoke('save-product', data),
   updateProduct: (id: number, data: Prisma.ProductUpdateInput) =>
     ipcRenderer.invoke('update-product', id, data),
@@ -19,7 +24,7 @@ const api = {
   createOrder: (data) => ipcRenderer.invoke('create-order', data),
   updateOrder: (id, data) => ipcRenderer.invoke('update-order', id, data),
   deleteOrder: (id) => ipcRenderer.invoke('delete-order', id),
-  getAreas: (opts?: { skip?: number; take?: number }) => ipcRenderer.invoke('get-areas', opts),
+  getAreas: (opts?: PaginationOpts) => ipcRenderer.invoke('get-areas', opts),
   deleteArea: (id) => ipcRenderer.invoke('delete-area', id),
   saveArea: (data) => ipcRenderer.invoke('save-area', data),
   getExpenses: (opts?: GetExpensesOptions) => ipcRenderer.invoke('get-expenses', opts),

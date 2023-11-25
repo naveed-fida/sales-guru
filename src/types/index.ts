@@ -8,6 +8,11 @@ export type Customer = Prisma.CustomerGetPayload<{
   include: { area: true }
 }>
 
+export type PaginationOpts = {
+  skip?: number
+  take?: number
+}
+
 export interface OrderInput {
   customerId?: number
   products: { productId?: number; quantity: number; price: number }[]

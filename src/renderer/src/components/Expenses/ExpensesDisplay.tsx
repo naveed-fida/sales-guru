@@ -105,7 +105,7 @@ export const ExpensesDisplay: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="expenses-display__body mt-4 h-[calc(100%-250px)]">
+      <div className="expenses-display__body mt-4 h-[calc(100%-220px)]">
         {validDateRange(expensesPeriod) ? (
           <>
             {isExpensesPeriodDefault ? (

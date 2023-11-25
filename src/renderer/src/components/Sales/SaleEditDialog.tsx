@@ -20,7 +20,7 @@ export default function SaleEditDialog({ isOpen, setOpen, order }: SaleEditDialo
 
   useEffect(() => {
     Promise.all([window.api.getCustomers(), window.api.getProducts()]).then(
-      ([customers, { products }]) => {
+      ([{ customers }, { products }]) => {
         setAllCustomers(customers)
         setAllProducts(products)
       },
