@@ -14,7 +14,7 @@ export const CustomersDisplay: React.FC = () => {
     window.api.getCustomers().then((customers) => {
       setCustomers(customers)
     })
-    window.api.getAreas().then((areas) => {
+    window.api.getAreas().then(({ areas }) => {
       setAllAreas(areas)
     })
   }, [])
