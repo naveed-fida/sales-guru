@@ -95,6 +95,7 @@ export const SalesDisplay: React.FC = () => {
               value={customerId}
               onChange={(e) => {
                 setCurrPage(1)
+                setParams({})
                 setCustomerId(e.target.value ? parseInt(e.target.value) : 'none')
               }}
             >

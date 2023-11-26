@@ -31,7 +31,7 @@ export const CustomersDisplay: React.FC = () => {
         setCustomerCount(count)
         setCustomers(customers)
       })
-  }, [])
+  }, [currPage])
 
   return (
     <div className="customers-display h-[90%]">

@@ -10,7 +10,7 @@ export type Order = Prisma.OrderGetPayload<{
 
 interface FormValues {
   customerId: number | undefined
-  products: { productId: number | undefined; quantity: number; price: number }[]
+  products: { productId: number; quantity: number; price: number }[]
   discount: number
   amountReceived: number
 }
@@ -62,6 +62,7 @@ export default function SaleForm({
       validationSchema={saleSchema}
     >
       {({ values }) => {
+        console.log(values)
         return (
           <Form>
             <div className="mt-4">
@@ -112,7 +113,6 @@ export default function SaleForm({
                                   name={`products.${index}.productId`}
                                   as="select"
                                   className="mt-1 block w-[250px] pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                  defaultValue={undefined}
                                   onChange={(e) => {
                                     if (!e.target.value || e.target.value === 'undefined') return
                                     const productId = Number(e.target.value)
@@ -127,7 +127,7 @@ export default function SaleForm({
                                     }
                                   }}
                                 >
-                                  <option className="bg-gray-400" value={undefined}>
+                                  <option className="bg-gray-400" value={0}>
                                     Select A Product
                                   </option>
                                   {allProducts.map((product) => (
@@ -154,38 +154,26 @@ export default function SaleForm({
                               <div>
                                 <label
                                   className="text-sm font-medium text-slate-700"
-                                  htmlFor={`products.${index}.unitPrice`}
+                                  htmlFor={`products.${index}.price`}
                                 >
                                   Price
                                 </label>
-                                <input
+                                <Field
                                   type="number"
-                                  disabled
-                                  id={`products.${index}.unitPrice`}
-                                  name={`products.${index}.unitPrice`}
-                                  value={productObj.price}
+                                  id={`products.${index}.price`}
+                                  name={`products.${index}.price`}
                                   className="mt-1 block w-full p-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                 />
                               </div>
                               <div>
-                                <label
-                                  className="text-sm font-medium text-slate-700"
-                                  htmlFor={`products.${index}.totalPrice`}
-                                >
+                                <span className="text-sm font-semibold text-slate-700">
                                   Subtotal
-                                </label>
-                                <input
-                                  type="number"
-                                  disabled
-                                  id={`products.${index}.totalPrice`}
-                                  name={`products.${index}.totalPrice`}
-                                  value={
-                                    productObj.price
-                                      ? Number(productObj.price) * Number(productObj.quantity)
-                                      : undefined
-                                  }
-                                  className="mt-1 block w-full p-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                />
+                                </span>
+                                <span className="mt-1 block w-full p-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                  {productObj.price
+                                    ? Number(productObj.price) * Number(productObj.quantity)
+                                    : undefined}
+                                </span>
                               </div>
                               <button
                                 type="button"
@@ -217,9 +205,7 @@ export default function SaleForm({
                       <button
                         type="button"
                         className="bg-green-700 text-white rounded-md px-2 py-1 block mt-4"
-                        onClick={() =>
-                          arrayHelpers.push({ productId: undefined, quantity: 0, price: 0 })
-                        }
+                        onClick={() => arrayHelpers.push({ productId: 0, quantity: 0, price: 0 })}
                       >
                         Add Product
                       </button>
