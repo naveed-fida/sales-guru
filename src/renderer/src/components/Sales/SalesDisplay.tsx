@@ -28,11 +28,11 @@ export const SalesDisplay: React.FC = () => {
     (statusFromParam as any) || 'all',
   )
 
+  const [returnedStatus, setReturnedStatus] = useState<'all' | 'returned' | 'not-returned'>('all')
+
   const [customerId, setCustomerId] = useState<number | 'none'>(
     customerIdFromParam ? Number(customerIdFromParam) : 'none',
   )
-
-  const [showReturnedOnly, setShowReturnedOnly] = useState<boolean>(false)
 
   const currentDateDiff = getTime(salesPeriod.to) - getTime(salesPeriod.from)
   const isSalesPeriodDefault =
@@ -52,7 +52,9 @@ export const SalesDisplay: React.FC = () => {
           ? { salesPeriod }
           : { salesPeriod: { from: defaultStartDate, to: defaultEndDate } }),
         ...(customerId === 'none' || !customerId ? {} : { customerId }),
-        ...(showReturnedOnly ? { returned: true } : {}),
+        ...(returnedStatus !== 'all'
+          ? { returned: returnedStatus == 'returned' ? true : false }
+          : {}),
         skip: (currPage - 1) * SALES_PER_PAGE,
         take: SALES_PER_PAGE,
       })
@@ -60,14 +62,14 @@ export const SalesDisplay: React.FC = () => {
         setSalesCount(count)
         setOrders(orders)
       })
-  }, [currPage, salesPeriod, statusFilter, customerId, showReturnedOnly])
+  }, [currPage, salesPeriod, statusFilter, customerId, returnedStatus])
 
   const showClearFiltersButton =
     customerId !== 'none' ||
     statusFilter !== 'all' ||
     !validDateRange(salesPeriod) ||
     !isSalesPeriodDefault ||
-    showReturnedOnly
+    returnedStatus !== 'all'
 
   return (
     <div className="sales-display h-full">
@@ -149,7 +151,7 @@ export const SalesDisplay: React.FC = () => {
           </div>
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-              By Status
+              By Payment Status
             </label>
             <select
               name="status"
@@ -167,21 +169,25 @@ export const SalesDisplay: React.FC = () => {
               <option value="paid">Paid</option>
             </select>
           </div>
-          <div className="flex items-center ml-4 align-middle gap-4 mt-4">
-            <label className="text-sm" htmlFor="returned-only">
-              Returned Only
+          <div>
+            <label htmlFor="returnedStatus" className="block text-sm font-medium text-gray-700">
+              By Returned Status
             </label>
-            <input
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
-              name="returned-only"
-              id="returned-only"
-              type="checkbox"
-              checked={showReturnedOnly}
-              onChange={() => {
+            <select
+              name="returnedStatus"
+              id="returnedStatus"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 mt-4"
+              placeholder="1600"
+              value={returnedStatus}
+              onChange={(e) => {
                 setCurrPage(1)
-                setShowReturnedOnly(!showReturnedOnly)
+                setReturnedStatus(e.target.value as any)
               }}
-            />
+            >
+              <option value="all">All</option>
+              <option value="returned">Returned</option>
+              <option value="not-returned">Not Returned</option>
+            </select>
           </div>
           {showClearFiltersButton && (
             <button
@@ -194,7 +200,7 @@ export const SalesDisplay: React.FC = () => {
                 })
                 setStatusFilter('all')
                 setCustomerId('none')
-                setShowReturnedOnly(false)
+                setReturnedStatus('all')
               }}
             >
               Clear Filters
