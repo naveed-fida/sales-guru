@@ -14,8 +14,9 @@ export type PaginationOpts = {
 }
 
 export interface OrderInput {
-  customerId?: number
-  products: { productId?: number; quantity: number; price: number }[]
+  customerId: number
+  createdAt: Date
+  products: { productId: number; quantity: number; price: number }[]
   discount: number
   amountReceived: number
 }

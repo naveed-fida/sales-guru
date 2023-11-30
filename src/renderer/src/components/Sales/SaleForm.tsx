@@ -3,16 +3,18 @@ import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { getOrderCurrentTotal, saleSchema } from './utils'
 import SaleTotals from './SaleTotals'
 import { BriefcaseIcon, XCircleIcon, ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
+import { parseISO, format as dateFmt } from 'date-fns'
 
 export type Order = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }
 }>
 
 interface FormValues {
-  customerId: number | undefined
+  customerId: number
   products: { productId: number; quantity: number; price: number }[]
   discount: number
   amountReceived: number
+  createdAt: Date
 }
 
 interface SaleForm {
@@ -40,6 +42,7 @@ export default function SaleForm({
         order
           ? {
               customerId: order.customerId,
+              createdAt: order.createdAt,
               products: order.orderProducts.map((op) => ({
                 productId: op.productId,
                 quantity: op.quantity,
@@ -49,7 +52,8 @@ export default function SaleForm({
               amountReceived: order.amountReceived,
             }
           : {
-              customerId: undefined,
+              customerId: 0,
+              createdAt: new Date(),
               products: [],
               discount: 0,
               amountReceived: 0,
@@ -76,9 +80,8 @@ export default function SaleForm({
                   as="select"
                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                   value={values.customerId}
-                  defaultValue={undefined}
                 >
-                  <option value={undefined}>Select A customer</option>
+                  <option value={0}>Select A customer</option>
                   {allCustomers.map((customer) => (
                     <option key={customer.id} value={customer.id}>
                       {customer.name}
@@ -88,6 +91,26 @@ export default function SaleForm({
                 <div className="text-red-700">
                   <ErrorMessage name="customerId" />
                 </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <label htmlFor="date" className="block text-md font-medium text-gray-700">
+                Date
+              </label>
+              <div className="mt-1">
+                <Field name="createdAt">
+                  {({ field, form }: { field: any; form: any }) => (
+                    <input
+                      type="date"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
+                      value={dateFmt(field.value, 'yyyy-MM-dd')}
+                      onChange={(e) => {
+                        const date = parseISO(e.target.value)
+                        form.setFieldValue('createdAt', date)
+                      }}
+                    />
+                  )}
+                </Field>
               </div>
             </div>
             <div className="mt-4">

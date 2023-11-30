@@ -37,6 +37,16 @@ model Product {
   productOrders OrderProduct[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  inventoryRecords InventroyRecord[]
+}
+
+model InventroyRecord {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {

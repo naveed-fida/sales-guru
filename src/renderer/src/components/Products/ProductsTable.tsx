@@ -34,7 +34,19 @@ export default function ProductsTable({ products }: TableProps) {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Stock
+                    Available Inventory
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Update Inventory
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    View Record
                   </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>
@@ -52,6 +64,29 @@ export default function ProductsTable({ products }: TableProps) {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {product.inventory}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <button
+                        onClick={() => {
+                          setSelectedProduct(product)
+                          setModalOpen(true)
+                        }}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Update
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <a
+                        onClick={() => {
+                          setSelectedProduct(product)
+                          setModalOpen(true)
+                        }}
+                        href="#"
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        View Record
+                      </a>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a

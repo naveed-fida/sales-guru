@@ -8,14 +8,8 @@ import type {
   GetExpensesOptions,
   GetOrdersOptions,
   PaginationOpts,
+  OrderInput,
 } from '../types'
-
-interface OrderInput {
-  customerId: number
-  products?: { productId: number; quantity: number; price: number }[]
-  discount: number
-  amountReceived: number
-}
 
 const prisma = new PrismaClient()
 
@@ -265,6 +259,7 @@ app.whenReady().then(() => {
         data: {
           customerId: data.customerId,
           discount: data.discount,
+          createdAt: data.createdAt,
           amountReceived: data.amountReceived,
           amountDue,
           totalAmount: total,
@@ -313,6 +308,7 @@ app.whenReady().then(() => {
       await prisma.order.create({
         data: {
           customerId: data.customerId,
+          createdAt: data.createdAt,
           discount: data.discount,
           amountReceived: data.amountReceived,
           amountDue,
