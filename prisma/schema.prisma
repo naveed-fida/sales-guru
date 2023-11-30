@@ -53,6 +53,7 @@ model Order {
   id        Int      @id @default(autoincrement())
   customer  Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId Int
+  billNumber     String?
   orderProducts OrderProduct[]
   amountReceived Int @default(0)
   discount       Int @default(0)
