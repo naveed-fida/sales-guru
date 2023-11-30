@@ -40,6 +40,10 @@ interface API {
   }) => Promise<{ total: number; outstanding: number }>
   returnOrder: (id: number) => Promise<Order>
   reReturnOrder: (id: number) => Promise<Order>
+  getInventoryHistory: (
+    id: number,
+    opts?: PaginationOpts,
+  ) => Promise<{ records: Prisma.InventoryRecord[]; count: number }>
 }
 
 declare global {

@@ -150,7 +150,7 @@ app.whenReady().then(() => {
   ipcMain.handle('get-products', async (_, opts?: { take?: number; skip?: number }) => {
     const products = await prisma.product.findMany({
       orderBy: {
-        createdAt: 'desc',
+        updatedAt: 'desc',
       },
       skip: opts?.skip,
       take: opts?.take,
@@ -363,6 +363,27 @@ app.whenReady().then(() => {
         },
       })
     })
+  })
+
+  ipcMain.handle('get-inventory-history', async (_, id, opts?: PaginationOpts) => {
+    const [records, count] = await Promise.all([
+      prisma.inventroyRecord.findMany({
+        where: {
+          productId: id,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip: opts?.skip,
+        take: opts?.take,
+      }),
+      prisma.inventroyRecord.count({
+        where: {
+          productId: id,
+        },
+      }),
+    ])
+    return { records, count }
   })
 
   ipcMain.handle('get-areas', async (_, opts?: { skip?: number; take?: number }) => {

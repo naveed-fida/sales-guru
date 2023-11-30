@@ -65,6 +65,7 @@ export default function ProductEditDialog({ isOpen, setOpen, product }: ProductE
                     <Field
                       name="inventory"
                       id="inventory"
+                      step="0.5"
                       type="number"
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                       placeholder="50"

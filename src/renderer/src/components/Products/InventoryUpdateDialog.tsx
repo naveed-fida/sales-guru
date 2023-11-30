@@ -38,6 +38,7 @@ export default function InventoryUpdateDialog({
               }}
               onSubmit={(values) => {
                 const castValues = inventoryRecordSchema.cast(values)
+                console.log(product.id, product.name, castValues)
                 window.api.addInventory(product.id, castValues).then(() => {
                   navigate(0)
                 })
@@ -52,6 +53,8 @@ export default function InventoryUpdateDialog({
                   <div className="mt-1">
                     <Field
                       name="quantity"
+                      type="number"
+                      step="0.5"
                       id="quantity"
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                       placeholder="Gul Khan"

@@ -13,7 +13,7 @@ export const saleSchema = Yup.object().shape({
       Yup.object().shape({
         productId: Yup.number().required('Product is required').moreThan(0, 'Product is required'),
         quantity: Yup.number()
-          .min(1, 'Quantity cannot be less than 1')
+          .min(0.5, 'Quantity cannot be less than .5')
           .required('Quantity is required'),
         price: Yup.number().required(),
       }),

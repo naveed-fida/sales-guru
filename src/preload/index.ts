@@ -40,6 +40,8 @@ const api = {
   addInventory: (id: number, data: InventoryRecordInput) =>
     ipcRenderer.invoke('add-inventory', id, data),
   reReturnOrder: (id: number) => ipcRenderer.invoke('re-return-order', id),
+  getInventoryHistory: (id: number, opts?: PaginationOpts) =>
+    ipcRenderer.invoke('get-inventory-history', id, opts),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

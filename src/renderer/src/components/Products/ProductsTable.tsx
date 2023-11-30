@@ -2,6 +2,7 @@ import type { Product } from '@prisma/client'
 import { useState } from 'react'
 import ProductEditDialog from './ProductEditDialog'
 import InventoryUpdateDialog from './InventoryUpdateDialog'
+import InventoryHistoryDialog from './InventoryHistoryDialog'
 
 interface TableProps {
   products: Product[]
@@ -9,7 +10,7 @@ interface TableProps {
 
 export default function ProductsTable({ products }: TableProps) {
   const [isModalOpen, setModalOpen] = useState(false)
-  const [modelType, setModalType] = useState<'update' | 'edit'>('edit')
+  const [modelType, setModalType] = useState<'update' | 'edit' | 'history'>('edit')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   return (
@@ -79,6 +80,7 @@ export default function ProductsTable({ products }: TableProps) {
                       <a
                         onClick={() => {
                           setSelectedProduct(product)
+                          setModalType('history')
                           setModalOpen(true)
                         }}
                         href="#"
@@ -107,16 +109,25 @@ export default function ProductsTable({ products }: TableProps) {
           </div>
         </div>
       </div>
-      <ProductEditDialog
-        isOpen={isModalOpen && modelType === 'edit'}
-        setOpen={(open) => setModalOpen(open)}
-        product={selectedProduct}
-      />
-      <InventoryUpdateDialog
-        isOpen={isModalOpen && modelType === 'update'}
-        setOpen={(open) => setModalOpen(open)}
-        product={selectedProduct}
-      />
+      {selectedProduct && (
+        <>
+          <ProductEditDialog
+            isOpen={isModalOpen && modelType === 'edit'}
+            setOpen={(open) => setModalOpen(open)}
+            product={selectedProduct}
+          />
+          <InventoryUpdateDialog
+            isOpen={isModalOpen && modelType === 'update'}
+            setOpen={(open) => setModalOpen(open)}
+            product={selectedProduct}
+          />
+          <InventoryHistoryDialog
+            isOpen={isModalOpen && modelType === 'history'}
+            setOpen={(open) => setModalOpen(open)}
+            product={selectedProduct as Product}
+          />
+        </>
+      )}
     </div>
   )
 }

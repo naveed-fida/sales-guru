@@ -60,6 +60,7 @@ export default function ProductAddDialog({ isOpen, setOpen }: ProductAddDialogPr
                     name="inventory"
                     id="inventory"
                     type="number"
+                    step="0.5"
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
                     placeholder="50"
                   />

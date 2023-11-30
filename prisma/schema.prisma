@@ -33,7 +33,7 @@ model Product {
   id        Int      @id @default(autoincrement())
   name      String
   price     Float
-  inventory Int
+  inventory Float
   productOrders OrderProduct[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,7 +44,7 @@ model InventroyRecord {
   id        Int      @id @default(autoincrement())
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  quantity  Int
+  quantity  Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -55,11 +55,11 @@ model Order {
   customerId Int
   billNumber     String?
   orderProducts OrderProduct[]
-  amountReceived Int @default(0)
-  discount       Int @default(0)
-  amountDue      Int
+  amountReceived Float @default(0)
+  discount       Float @default(0)
+  amountDue      Float
   returned      Boolean @default(false)
-  totalAmount    Int
+  totalAmount    Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -79,7 +79,7 @@ model OrderProduct {
   orderId   Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  quantity  Int
+  quantity  Float
   pricePerUnit Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
