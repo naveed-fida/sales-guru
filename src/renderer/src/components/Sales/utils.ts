@@ -7,6 +7,7 @@ export type OrderDetails = Prisma.OrderGetPayload<{
 export const saleSchema = Yup.object().shape({
   customerId: Yup.number().required('Customer is required').moreThan(0, 'Customer is required'),
   createdAt: Yup.date().required('Date is required'),
+  billNumber: Yup.string().required('Bill Number is required'),
   products: Yup.array()
     .of(
       Yup.object().shape({

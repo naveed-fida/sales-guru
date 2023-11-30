@@ -15,6 +15,7 @@ export type PaginationOpts = {
 
 export interface OrderInput {
   customerId: number
+  billNumber: string | null
   createdAt: Date
   products: { productId: number; quantity: number; price: number }[]
   discount: number

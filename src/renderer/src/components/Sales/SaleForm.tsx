@@ -11,6 +11,7 @@ export type Order = Prisma.OrderGetPayload<{
 
 interface FormValues {
   customerId: number
+  billNumber: string | null
   products: { productId: number; quantity: number; price: number }[]
   discount: number
   amountReceived: number
@@ -43,6 +44,7 @@ export default function SaleForm({
           ? {
               customerId: order.customerId,
               createdAt: order.createdAt,
+              billNumber: order.billNumber || ' ',
               products: order.orderProducts.map((op) => ({
                 productId: op.productId,
                 quantity: op.quantity,
@@ -53,6 +55,7 @@ export default function SaleForm({
             }
           : {
               customerId: 0,
+              billNumber: ' ',
               createdAt: new Date(),
               products: [],
               discount: 0,
@@ -235,6 +238,21 @@ export default function SaleForm({
                     </>
                   )}
                 />
+              </div>
+            </div>
+            <div className="mt-4">
+              <label htmlFor="billNumber" className="block text-md font-medium text-gray-700">
+                Bill Number
+              </label>
+              <div className="mt-1">
+                <Field
+                  id="billNumber"
+                  name="billNumber"
+                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
+                />
+                <div className="text-red-700">
+                  <ErrorMessage name="billNumber" />
+                </div>
               </div>
             </div>
             <div className="mt-4">

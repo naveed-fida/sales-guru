@@ -262,6 +262,7 @@ app.whenReady().then(() => {
           createdAt: data.createdAt,
           amountReceived: data.amountReceived,
           amountDue,
+          billNumber: data.billNumber,
           totalAmount: total,
           orderProducts: {
             create: data.products?.map((p) => ({
@@ -311,6 +312,7 @@ app.whenReady().then(() => {
           createdAt: data.createdAt,
           discount: data.discount,
           amountReceived: data.amountReceived,
+          billNumber: data.billNumber,
           amountDue,
           totalAmount: total,
           orderProducts: {
