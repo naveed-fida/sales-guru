@@ -9,6 +9,7 @@ import type {
   GetOrdersOptions,
   GetExpensesOptions,
   PaginationOpts,
+  InventoryRecordInput,
 } from '../types'
 
 interface API {
@@ -32,6 +33,7 @@ interface API {
   deleteExpense: (id: number) => Promise<Expense>
   saveExpense: (data: Prisma.ExpenseCreateInput) => Promise<Expense>
   getExpensesStats: (period: { from: Date; to: Date }) => Promise<{ total: number }>
+  addInventory: (id: number, data: InventoryRecordInput) => Promise<Product>
   getSalesStats: (period: {
     from: Date
     to: Date

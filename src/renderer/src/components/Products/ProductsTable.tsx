@@ -1,6 +1,7 @@
 import type { Product } from '@prisma/client'
 import { useState } from 'react'
 import ProductEditDialog from './ProductEditDialog'
+import InventoryUpdateDialog from './InventoryUpdateDialog'
 
 interface TableProps {
   products: Product[]
@@ -8,6 +9,7 @@ interface TableProps {
 
 export default function ProductsTable({ products }: TableProps) {
   const [isModalOpen, setModalOpen] = useState(false)
+  const [modelType, setModalType] = useState<'update' | 'edit'>('edit')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   return (
@@ -39,15 +41,11 @@ export default function ProductsTable({ products }: TableProps) {
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Update Inventory
-                  </th>
+                  ></th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    View Record
-                  </th>
+                  ></th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>
                   </th>
@@ -69,11 +67,12 @@ export default function ProductsTable({ products }: TableProps) {
                       <button
                         onClick={() => {
                           setSelectedProduct(product)
+                          setModalType('update')
                           setModalOpen(true)
                         }}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
-                        Update
+                        Update Inventory
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -85,13 +84,14 @@ export default function ProductsTable({ products }: TableProps) {
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
-                        View Record
+                        View History
                       </a>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
                         onClick={() => {
                           setSelectedProduct(product)
+                          setModalType('edit')
                           setModalOpen(true)
                         }}
                         href="#"
@@ -108,7 +108,12 @@ export default function ProductsTable({ products }: TableProps) {
         </div>
       </div>
       <ProductEditDialog
-        isOpen={isModalOpen}
+        isOpen={isModalOpen && modelType === 'edit'}
+        setOpen={(open) => setModalOpen(open)}
+        product={selectedProduct}
+      />
+      <InventoryUpdateDialog
+        isOpen={isModalOpen && modelType === 'update'}
         setOpen={(open) => setModalOpen(open)}
         product={selectedProduct}
       />

@@ -5,6 +5,7 @@ import type {
   CustomerFormInput,
   GetExpensesOptions,
   GetOrdersOptions,
+  InventoryRecordInput,
   PaginationOpts,
 } from '../types'
 
@@ -36,6 +37,8 @@ const api = {
   getSalesStats: (period: { from: Date; to: Date }) =>
     ipcRenderer.invoke('get-sales-stats', period),
   returnOrder: (id: number) => ipcRenderer.invoke('return-order', id),
+  addInventory: (id: number, data: InventoryRecordInput) =>
+    ipcRenderer.invoke('add-inventory', id, data),
   reReturnOrder: (id: number) => ipcRenderer.invoke('re-return-order', id),
 }
 

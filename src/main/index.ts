@@ -9,6 +9,7 @@ import type {
   GetOrdersOptions,
   PaginationOpts,
   OrderInput,
+  InventoryRecordInput,
 } from '../types'
 
 const prisma = new PrismaClient()
@@ -339,6 +340,28 @@ app.whenReady().then(() => {
           })
         }),
       )
+    })
+  })
+
+  ipcMain.handle('add-inventory', async (_, id, data: InventoryRecordInput) => {
+    await prisma.$transaction(async (prisma) => {
+      await prisma.inventroyRecord.create({
+        data: {
+          productId: id,
+          quantity: data.quantity,
+          createdAt: data.date,
+        },
+      })
+      await prisma.product.update({
+        where: {
+          id,
+        },
+        data: {
+          inventory: {
+            increment: data.quantity,
+          },
+        },
+      })
     })
   })
 

@@ -28,6 +28,11 @@ export interface CustomerFormInput {
   area?: number | null
 }
 
+export interface InventoryRecordInput {
+  quantity: number
+  date: Date
+}
+
 export interface GetOrdersOptions {
   skip?: number
   take?: number

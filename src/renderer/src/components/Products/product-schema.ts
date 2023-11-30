@@ -10,3 +10,8 @@ export const productSchema = Yup.object().shape({
     .min(1, 'Quantity cannot be less than 1')
     .required('Inventory is required'),
 })
+
+export const inventoryRecordSchema = Yup.object().shape({
+  quantity: Yup.number().min(1, 'Quantity cannot be less than 1').required('Quantity is required'),
+  date: Yup.date().required('Date is required'),
+})
