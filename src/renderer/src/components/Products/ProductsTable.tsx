@@ -1,8 +1,8 @@
-import type { Product } from '@prisma/client'
 import { useState } from 'react'
 import ProductEditDialog from './ProductEditDialog'
 import InventoryUpdateDialog from './InventoryUpdateDialog'
 import InventoryHistoryDialog from './InventoryHistoryDialog'
+import { Product } from '../../../../generated/client'
 
 interface TableProps {
   products: Product[]
@@ -77,30 +77,30 @@ export default function ProductsTable({ products }: TableProps) {
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <a
+                      <button
+                        type="button"
                         onClick={() => {
                           setSelectedProduct(product)
                           setModalType('history')
                           setModalOpen(true)
                         }}
-                        href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         View History
-                      </a>
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a
+                      <button
+                        type="button"
                         onClick={() => {
                           setSelectedProduct(product)
                           setModalType('edit')
                           setModalOpen(true)
                         }}
-                        href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Edit
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}

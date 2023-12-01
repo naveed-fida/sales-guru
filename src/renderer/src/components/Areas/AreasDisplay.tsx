@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import AreasTable from './AreasTable'
 import AreaAddDialog from './AreaAddDialog'
-import { Area } from '@prisma/client'
+import { Area } from '../../../../generated/client'
 import { Pagination } from '@mui/material'
 
 const AREAS_PER_PAGE = 10

@@ -2,7 +2,7 @@ import type { Customer } from '../../../../types'
 import { useEffect, useState } from 'react'
 import CustomersTable from './CustomersTable'
 import CustomerAddDialog from './CustomerAddDialog'
-import { Area } from '@prisma/client'
+import { Area } from '../../../../generated/client'
 import { Pagination } from '@mui/material'
 
 const CUSTOMERS_PER_PAGE = 10

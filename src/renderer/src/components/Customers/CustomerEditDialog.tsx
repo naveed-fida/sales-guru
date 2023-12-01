@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { BriefcaseIcon, XCircleIcon } from '@heroicons/react/20/solid'
 import { customerSchema } from './customer-schema'
-import { Area } from '@prisma/client'
+import { Area } from '../../../../generated/client'
 
 interface CustomerEditDialogProps {
   isOpen: boolean

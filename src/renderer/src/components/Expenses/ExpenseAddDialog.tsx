@@ -31,7 +31,6 @@ export default function ExpenseAddDialog({ isOpen, setOpen }: ExpenseAddDialogPr
               window.api.saveExpense(castValues).then(() => {
                 navigate(0)
               })
-              console.log(values)
             }}
             validationSchema={expenseSchema}
           >

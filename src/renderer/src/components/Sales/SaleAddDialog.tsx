@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import type { Prisma, Customer, Product } from '@prisma/client'
+import type { Prisma, Customer, Product } from '../../../../generated/client'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import SaleForm from './SaleForm'

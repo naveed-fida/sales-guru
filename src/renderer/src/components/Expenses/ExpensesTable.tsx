@@ -1,6 +1,6 @@
-import type { Expense } from '@prisma/client'
 import { useNavigate } from 'react-router-dom'
 import { format as dateFmt } from 'date-fns'
+import { Expense } from '../../../../generated/client'
 
 interface TableProps {
   expenses: Expense[]
@@ -53,17 +53,17 @@ export default function ExpensesTable({ expenses }: TableProps) {
                       {dateFmt(expense.date, 'dd/MM/yyyy')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a
+                      <button
+                        type="button"
                         onClick={() => {
                           window.api.deleteExpense(expense.id).then(() => {
                             navigate(0)
                           })
                         }}
-                        href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Delete
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}

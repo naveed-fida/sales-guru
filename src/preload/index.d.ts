@@ -1,6 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { Prisma, Area } from '@prisma/client'
-import type { Product, Expense } from '@prisma/client'
+import type { Prisma, Area } from '../generated/client'
+import type { Product, Expense } from '../generated/client'
 import type {
   Order,
   Customer,

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import type { Area } from '@prisma/client'
+import type { Area } from '../../../../generated/client'
 
 interface TableProps {
   areas: Area[]
@@ -34,17 +34,17 @@ export default function CustomersTable({ areas }: TableProps) {
                       {area.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a
+                      <button
+                        type="button"
                         onClick={() => {
                           window.api.deleteArea(area.id).then(() => {
                             navigate(0)
                           })
                         }}
-                        href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Delete
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}

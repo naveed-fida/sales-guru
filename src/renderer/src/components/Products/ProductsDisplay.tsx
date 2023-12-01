@@ -1,4 +1,4 @@
-import type { Product } from '@prisma/client'
+import type { Product } from '../../../../generated/client'
 import { useEffect, useState } from 'react'
 import ProductsTable from './ProductsTable'
 import ProductAddDialog from './ProductAddDialog'

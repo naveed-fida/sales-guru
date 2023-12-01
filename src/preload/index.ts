@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '../generated/client'
 import type {
   CustomerFormInput,
   GetExpensesOptions,

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../src/generated/client'
 import { subDays } from 'date-fns'
 const invariant = require('tiny-invariant')
 

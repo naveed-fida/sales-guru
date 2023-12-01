@@ -1,8 +1,13 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { dbPath, dbUrl, latestMigration, Migration } from './constants'
+import { prisma, runPrismaCommand } from './prisma'
+import fs from 'fs'
+import path from 'path'
+import { format as formatURL } from 'url'
+
 import type {
   CustomerFormInput,
   GetExpensesOptions,
@@ -11,10 +16,53 @@ import type {
   OrderInput,
   InventoryRecordInput,
 } from '../types'
+import log from 'electron-log'
 
-const prisma = new PrismaClient()
+async function createWindow(): Promise<void> {
+  let needsMigration
+  const dbExists = fs.existsSync(dbPath)
+  if (!dbExists) {
+    needsMigration = true
+    // prisma for whatever reason has trouble if the database file does not exist yet.
+    // So just touch it here
+    fs.closeSync(fs.openSync(dbPath, 'w'))
+  } else {
+    try {
+      const latest: Migration[] =
+        await prisma.$queryRaw`select * from _prisma_migrations order by finished_at`
+      needsMigration = latest[latest.length - 1]?.migration_name !== latestMigration
+    } catch (e) {
+      log.error(e)
+      needsMigration = true
+    }
+  }
 
-function createWindow(): void {
+  if (needsMigration) {
+    try {
+      const schemaPath = path.join(
+        app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
+        'prisma',
+        'schema.prisma',
+      )
+      log.info(`Needs a migration. Running prisma migrate with schema path ${schemaPath}`)
+
+      // first create or migrate the database! If you were deploying prisma to a cloud service, this migrate deploy
+      // command you would run as part of your CI/CD deployment. Since this is an electron app, it just needs
+      // to run every time the production app is started. That way if the user updates the app and the schema has
+      // changed, it will transparently migrate their DB.
+      await runPrismaCommand({
+        command: ['migrate', 'deploy', '--schema', schemaPath],
+        dbUrl,
+      })
+      log.info('Migration done.')
+    } catch (e) {
+      log.error(e)
+      process.exit(1)
+    }
+  } else {
+    log.info('Does not need migration')
+  }
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -27,6 +75,13 @@ function createWindow(): void {
       sandbox: false,
     },
   })
+  mainWindow.loadURL(
+    formatURL({
+      pathname: path.join(__dirname, '../renderer/index.html'), // relative path to the HTML-file
+      protocol: 'file:',
+      slashes: true,
+    }),
+  )
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -36,14 +91,6 @@ function createWindow(): void {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
 }
 
 // This method will be called when Electron has finished
@@ -443,7 +490,7 @@ app.whenReady().then(() => {
     return result
   })
 
-  ipcMain.handle('save-expense', async (_, expense: Prisma.ExpenseCreateInput) => {
+  ipcMain.handle('save-expense', async (_, expense: any) => {
     const result = await prisma.expense.create({
       data: expense,
     })
@@ -572,6 +619,7 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    prisma.$disconnect()
     app.quit()
   }
 })

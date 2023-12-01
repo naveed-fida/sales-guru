@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma } from '../generated/client'
 
 export type Order = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }

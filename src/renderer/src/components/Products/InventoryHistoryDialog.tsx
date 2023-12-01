@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import type { InventroyRecord, Product } from '@prisma/client'
+import type { InventroyRecord, Product } from '../../../../generated/client'
 import { format as dateFmt } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { Pagination } from '@mui/material'

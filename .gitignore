@@ -1,6 +1,9 @@
 node_modules
 postgres-data
 build
+src/generated
 dist
 out
 *.log*
+packed
+.DS_Store

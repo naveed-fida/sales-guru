@@ -1,43 +1,52 @@
 appId: com.sales_guru.app
-productName: sales_guru
+productName: 'Sales Guru'
 directories:
-  buildResources: build
+  buildResources: resources
+  output: packed
 files:
+  - dist/**/*
+  - prisma/**/*
+  - '!prisma/dev.db'
+  - resources/**/*
+  # @prisma is not needed in the packed app unless using prisma migrate
+  - '!**/node_modules/@prisma/engines/introspection-engine*'
+  - '!**/node_modules/@prisma/engines/schema-engine*'
+  - '!**/node_modules/@prisma/engines/prisma-fmt*'
+  - '!**/node_modules/@prisma/engines/query_engine-*'
+  - '!**/node_modules/@prisma/engines/libquery_engine*'
+  - '!**/node_modules/prisma/query_engine*'
+  - '!**/node_modules/prisma/libquery_engine*'
+  - '!**/node_modules/prisma/**/*.mjs'
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
-asarUnpack:
-  - resources/**
+extraResources: # Only if you need to run prisma migrate
+  - node_modules/@prisma/engines/schema-engine*
+  - node_modules/@prisma/engines/query*
+  - node_modules/@prisma/engines/libquery*
 win:
-  executableName: sales_guru
-nsis:
-  artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
-mac:
-  entitlementsInherit: build/entitlements.mac.plist
-  extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  notarize: false
-dmg:
-  artifactName: ${name}-${version}.${ext}
-linux:
   target:
-    - AppImage
-    - snap
-    - deb
-  maintainer: electronjs.org
-  category: Utility
-appImage:
-  artifactName: ${name}-${version}.${ext}
-npmRebuild: false
-publish:
-  provider: generic
-  url: https://example.com/auto-updates
+    - nsis
+  asar:
+    smartUnpack: false
+  asarUnpack: # only if you need to run prisma migrate:
+    - prisma
+  artifactName: ${name}-${version}-setup.${ext}
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip # zip is required because of electron-userland/electron-builder#2199
+      arch:
+        - x64
+        - arm64
+  entitlements: ./entitlements.mac.plist
+  entitlementsInherit: ./entitlements.mac.plist
+  hardenedRuntime: true
+  asarUnpack: # only if you need to run prisma migrate:
+    - prisma

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ExpensesTable from './ExpensesTable'
 import ExpenseAddDialog from './ExpenseAddDialog'
-import { Expense } from '@prisma/client'
+import { Expense } from '../../../../generated/client'
 import { endOfDay, getTime, parseISO, startOfDay, startOfMonth, format as dateFmt } from 'date-fns'
 import { Pagination } from '@mui/material'
 import { validDateRange } from '../utils'

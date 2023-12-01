@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import type { Product } from '@prisma/client'
+import type { Product } from '../../../../generated/client'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { BriefcaseIcon, XCircleIcon } from '@heroicons/react/20/solid'

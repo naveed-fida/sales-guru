@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 export type OrderDetails = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }
 }>
@@ -6,6 +5,7 @@ import { useState } from 'react'
 import SaleEditDialog from './SaleEditDialog'
 import { format as dateFmt } from 'date-fns'
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/solid'
+import { Prisma } from '../../../../generated/client'
 
 interface SalesTableProps {
   orders: OrderDetails[]
@@ -98,16 +98,16 @@ export default function SalesTable({ orders }: SalesTableProps) {
                         {order.amountDue}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a
+                        <button
+                          type="button"
                           onClick={() => {
                             setSelectedOrder(order)
                             setModalOpen(true)
                           }}
-                          href="#"
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           Edit
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   )

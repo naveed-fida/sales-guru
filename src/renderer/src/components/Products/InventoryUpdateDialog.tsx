@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import type { Product } from '@prisma/client'
+import type { Product } from '../../../../generated/client'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { BriefcaseIcon } from '@heroicons/react/20/solid'
@@ -38,7 +38,6 @@ export default function InventoryUpdateDialog({
               }}
               onSubmit={(values) => {
                 const castValues = inventoryRecordSchema.cast(values)
-                console.log(product.id, product.name, castValues)
                 window.api.addInventory(product.id, castValues).then(() => {
                   navigate(0)
                 })

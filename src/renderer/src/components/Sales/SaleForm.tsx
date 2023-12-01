@@ -1,4 +1,4 @@
-import type { Customer, Prisma, Product } from '@prisma/client'
+import type { Customer, Prisma, Product } from '../../../../generated/client'
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { getOrderCurrentTotal, saleSchema } from './utils'
 import SaleTotals from './SaleTotals'
@@ -44,7 +44,7 @@ export default function SaleForm({
           ? {
               customerId: order.customerId,
               createdAt: order.createdAt,
-              billNumber: order.billNumber || ' ',
+              billNumber: order.billNumber,
               products: order.orderProducts.map((op) => ({
                 productId: op.productId,
                 quantity: op.quantity,
@@ -55,7 +55,7 @@ export default function SaleForm({
             }
           : {
               customerId: 0,
-              billNumber: ' ',
+              billNumber: null,
               createdAt: new Date(),
               products: [],
               discount: 0,
@@ -69,7 +69,6 @@ export default function SaleForm({
       validationSchema={saleSchema}
     >
       {({ values }) => {
-        console.log(values)
         return (
           <Form>
             <div className="mt-4">

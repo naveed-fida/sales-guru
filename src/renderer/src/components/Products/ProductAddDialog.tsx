@@ -30,7 +30,6 @@ export default function ProductAddDialog({ isOpen, setOpen }: ProductAddDialogPr
               window.api.saveProduct(castValues).then(() => {
                 navigate(0)
               })
-              console.log(values)
             }}
             validationSchema={productSchema}
           >
