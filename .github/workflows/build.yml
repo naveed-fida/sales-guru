@@ -27,3 +27,9 @@ jobs:
 
       - name: Build The executable
         run: npm run publish
+
+      - name: 📤 Upload the executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'SalesGuru.dmg'
+          path: 'packed/Sales Guru-1.0.0.dmg'
