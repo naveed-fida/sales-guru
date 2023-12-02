@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-production:
+    name: Building and outputting Binaries
+    runs-on: macos-12
+
+    steps:
+      - name: ⬇️ checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          cache-dependency-path: package-lock.json
+          node-version: 18
+
+      - name: 📥 Install deps
+        run: npm install
+
+      - name: Build The executable
+        run: npm run dist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: SalesGuru.dmg
+          path: "packed/Sales\ Guru-1.0.0.dmg"
