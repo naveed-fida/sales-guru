@@ -4,6 +4,7 @@ on:
       - main
 jobs:
   deploy-production:
+    permissions: write-all
     name: Building and outputting Binaries
     runs-on: macos-12
     env:
