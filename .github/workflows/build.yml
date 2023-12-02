@@ -6,6 +6,9 @@ jobs:
   deploy-production:
     name: Building and outputting Binaries
     runs-on: macos-12
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: ⬇️ checkout repo
@@ -22,8 +25,4 @@ jobs:
         run: npm install
 
       - name: Build The executable
-        run: npm run dist
-      - uses: actions/upload-artifact@v3
-        with:
-          name: SalesGuru.dmg
-          path: "packed/Sales\ Guru-1.0.0.dmg"
+        run: npm run publish

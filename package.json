@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "An Electron & React application with Sqlite, Prisma and Typescript",
   "main": "./dist/main/index.js",
+  "repository": "https://github.com/naveed-fida/sales-guru",
   "author": "Naveed Fida",
   "scripts": {
     "build": "electron-vite build && prisma generate && tsc --noEmit && node copy-files.js && node install-engines-on-mac.js",

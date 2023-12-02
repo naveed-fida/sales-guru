@@ -27,24 +27,14 @@ extraResources: # Only if you need to run prisma migrate
   - node_modules/@prisma/engines/schema-engine*
   - node_modules/@prisma/engines/query*
   - node_modules/@prisma/engines/libquery*
-win:
-  target:
-    - nsis
-  asar:
-    smartUnpack: false
-  asarUnpack: # only if you need to run prisma migrate:
-    - prisma
-  artifactName: ${name}-${version}-setup.${ext}
 mac:
   target:
     - target: dmg
       arch:
         - x64
-        - arm64
     - target: zip # zip is required because of electron-userland/electron-builder#2199
       arch:
         - x64
-        - arm64
   entitlements: ./entitlements.mac.plist
   entitlementsInherit: ./entitlements.mac.plist
   hardenedRuntime: true
