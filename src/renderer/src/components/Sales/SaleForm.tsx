@@ -4,6 +4,8 @@ import { getOrderCurrentTotal, saleSchema } from './utils'
 import SaleTotals from './SaleTotals'
 import { BriefcaseIcon, XCircleIcon, ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 import { parseISO, format as dateFmt } from 'date-fns'
+import { Autocomplete, TextField } from '@mui/material'
+import { useMemo, useState } from 'react'
 
 export type Order = Prisma.OrderGetPayload<{
   include: { customer: true; orderProducts: { include: { product: true } } }
@@ -37,6 +39,12 @@ export default function SaleForm({
   onReturnClick,
   onReReturnClick,
 }: SaleForm) {
+  const customersList = useMemo(
+    () => allCustomers.map((cust) => ({ label: cust.name, id: cust.id })),
+    [allCustomers],
+  )
+
+  const [customer, setCustomer] = useState<{ label: string; id: number } | null>(null)
   return (
     <Formik<FormValues>
       initialValues={
@@ -68,7 +76,7 @@ export default function SaleForm({
       }}
       validationSchema={saleSchema}
     >
-      {({ values }) => {
+      {({ values, setValues }) => {
         return (
           <Form>
             <div className="mt-4">
@@ -76,20 +84,17 @@ export default function SaleForm({
                 Customer
               </label>
               <div className="mt-1">
-                <Field
-                  id="customerId"
-                  name="customerId"
-                  as="select"
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  value={values.customerId}
-                >
-                  <option value={0}>Select A customer</option>
-                  {allCustomers.map((customer) => (
-                    <option key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </option>
-                  ))}
-                </Field>
+                <Autocomplete
+                  options={customersList}
+                  value={customer}
+                  onChange={(_, value) => {
+                    if (value) {
+                      setCustomer(value)
+                      setValues((vals) => ({ ...vals, customerId: value.id }))
+                    }
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
                 <div className="text-red-700">
                   <ErrorMessage name="customerId" />
                 </div>
