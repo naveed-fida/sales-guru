@@ -3,7 +3,7 @@ import { app } from 'electron'
 
 export const isDev = process.env.NODE_ENV === 'development'
 export const dbPath = path.join(app.getPath('userData'), 'app.db')
-export const dbUrl = isDev ? 'file:./dev.db' : 'file:' + dbPath
+export const dbUrl = isDev ? 'file:./app.db' : 'file:' + dbPath
 
 process.env.DATABASE_URL = dbUrl
 

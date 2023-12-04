@@ -7,3 +7,4 @@ out
 *.log*
 packed
 .DS_Store
+app.db

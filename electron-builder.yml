@@ -6,7 +6,7 @@ directories:
 files:
   - dist/**/*
   - prisma/**/*
-  - '!prisma/dev.db'
+  - '!prisma/app.db'
   - resources/**/*
   # @prisma is not needed in the packed app unless using prisma migrate
   - '!**/node_modules/@prisma/engines/introspection-engine*'
