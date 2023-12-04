@@ -115,8 +115,13 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  ipcMain.handle('get-customers', async (_, opts?: PaginationOpts) => {
+  ipcMain.handle('get-customers', async (_, opts?: PaginationOpts & { query?: string }) => {
     const customers = await prisma.customer.findMany({
+      where: {
+        name: {
+          contains: opts?.query || '',
+        },
+      },
       include: {
         area: true,
       },

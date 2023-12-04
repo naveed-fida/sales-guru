@@ -13,7 +13,9 @@ import type {
 } from '../types'
 
 interface API {
-  getCustomers: (opts?: PaginationOpts) => Promise<{ customers: Customer[]; count: number }>
+  getCustomers: (
+    opts?: PaginationOpts & { query?: string },
+  ) => Promise<{ customers: Customer[]; count: number }>
   saveCustomer: (data: CustomerFormInput) => Promise<Customer>
   updateCustomer: (id: int, data: CustomerFormInput) => Promise<Customer>
   deleteCustomer: (id: int) => Promise<Customer>

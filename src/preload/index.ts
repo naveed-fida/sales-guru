@@ -11,7 +11,8 @@ import type {
 
 // Custom APIs for renderer
 const api = {
-  getCustomers: (opts?: PaginationOpts) => ipcRenderer.invoke('get-customers', opts),
+  getCustomers: (opts?: PaginationOpts & { query?: string }) =>
+    ipcRenderer.invoke('get-customers', opts),
   saveCustomer: (customer: CustomerFormInput) => ipcRenderer.invoke('save-customer', customer),
   updateCustomer: (id: number, data: CustomerFormInput) =>
     ipcRenderer.invoke('update-customer', id, data),
