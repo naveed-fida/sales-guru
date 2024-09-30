@@ -1,6 +1,6 @@
-# sales_guru
+# SalesGuru
 
-An Electron application with React and TypeScript
+A POS/Inventory software for tracking inventory and product sales built with Electon, React and Prisma (SQLite).
 
 ## Recommended IDE Setup
 
